@@ -28,6 +28,15 @@ fn spawn_players(mut commands: Commands, query: Query<&Window>) {
     let window = query.single().expect("No primary window found");
     let width = window.width() / 2.0;
     
+    commands.spawn((
+        Sprite {
+            color: Color::BLACK,
+            custom_size: Some(Vec2::new(width * 2.0, window.height())),
+            ..default()
+        },
+        Transform::default(),
+    ));
+    
     commands.spawn_batch([
         (
             Sprite {
