@@ -13,7 +13,8 @@ fn main() {
         ))
         .add_systems(Update, (
             paddle::move_paddles,
-            ball::move_ball
+            ball::move_ball,
+            ball::collide_ball
         ))
         .run()
     ;

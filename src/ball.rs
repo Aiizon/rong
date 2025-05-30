@@ -1,6 +1,8 @@
 use bevy::prelude::*;
+use crate::paddle;
+use crate::paddle::Paddle;
 
-const BALL_RADIUS: f32 = 10.0;
+pub const BALL_RADIUS: f32 = 10.0;
 
 #[derive(Component)]
 pub struct Ball {
@@ -28,5 +30,23 @@ pub(crate) fn move_ball(
 ) {
     for (mut pos, ball) in &mut balls {
         pos.translation += ball.velocity.extend(0.0) * time.delta_secs();
+    }
+}
+
+pub(crate) fn collide_ball(
+    mut balls: Query<(&Transform, &mut Ball)>,
+    paddles:   Query<&Transform, With<Paddle>>
+) {
+    for (ball, mut vel) in &mut balls {
+        for paddle in paddles {
+            if 
+                ball.translation.x - BALL_RADIUS / 2.0 < paddle.translation.x + paddle::PADDLE_WIDTH / 4.0 &&
+                ball.translation.y - BALL_RADIUS / 2.0 < paddle.translation.y + paddle::PADDLE_WIDTH / 4.0 &&
+                ball.translation.x + BALL_RADIUS / 2.0 > paddle.translation.x - paddle::PADDLE_WIDTH / 4.0 &&
+                ball.translation.y + BALL_RADIUS / 2.0 > paddle.translation.y - paddle::PADDLE_WIDTH / 4.0 
+            { 
+                vel.velocity *= -1.0;
+            }
+        }
     }
 }

@@ -3,7 +3,9 @@ use bevy::math::{Vec2, Vec3};
 use bevy::prelude::*;
 use bevy::time::Time;
 
-const PADDLE_SIZE: Vec2 = Vec2::new(10.0, 100.0);
+pub const PADDLE_HEIGHT: f32 = 10.0;
+pub const PADDLE_WIDTH: f32 = 100.0;
+pub const PADDLE_SIZE: Vec2 = Vec2::new(PADDLE_HEIGHT, PADDLE_WIDTH);
 
 #[derive(Component)]
 pub struct Paddle {
@@ -73,11 +75,11 @@ pub(crate) fn move_paddles(
 
     for (mut pos, settings) in &mut paddles {
         if input.pressed(settings.move_up) { 
-            pos.translation.y += 160.0 * time.delta_secs();
+            pos.translation.y += 200.0 * time.delta_secs();
             pos.translation.y = pos.translation.y.clamp(-height, height);
         }
         if input.pressed(settings.move_down) {
-            pos.translation.y -= 160.0 * time.delta_secs();
+            pos.translation.y -= 200.0 * time.delta_secs();
             pos.translation.y = pos.translation.y.clamp(-height, height);
         }
     }
