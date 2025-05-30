@@ -32,11 +32,7 @@ fn main() {
         ball::spawn_ball
     ));
     
-    app.add_systems(Update, (
-        paddle::move_paddles,
-        ball::move_ball,
-        ball::collide_ball
-    ));
+    app.add_systems(Update, paddle::move_paddles);
     
     app.run();
 }
