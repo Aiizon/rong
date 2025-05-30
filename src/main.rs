@@ -28,7 +28,7 @@ fn main() {
     app.add_plugins(RapierDebugRenderPlugin::default());
     
     app.add_systems(Startup, (
-        spawn_camera, 
+        setup,
         paddle::spawn_players,
         ball::spawn_ball,
         border::spawn_borders
@@ -39,6 +39,13 @@ fn main() {
     app.run();
 }
 
-fn spawn_camera(mut commands: Commands) {
+fn setup(
+    mut commands:   Commands,
+    rapier_configs: Query<&mut RapierConfiguration>
+) {
     commands.spawn(Camera2d::default());
+    
+    for mut config in rapier_configs {
+        config.gravity = Vec2::ZERO;
+    }
 }

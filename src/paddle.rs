@@ -2,7 +2,6 @@ use bevy::color::Color;
 use bevy::math::{Vec2, Vec3};
 use bevy::prelude::*;
 use bevy::time::Time;
-use bevy_rapier2d::plugin::RapierConfiguration;
 use bevy_rapier2d::prelude::*;
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
@@ -51,16 +50,7 @@ impl Paddle {
 }
 
 
-pub(crate) fn spawn_players(
-    mut commands:   Commands,
-    rapier_configs: Query<&mut RapierConfiguration>
-) {
-    let width = WINDOW_WIDTH / 2.0;
-    
-    for mut config in rapier_configs {
-        config.gravity = Vec2::ZERO;
-    }
-
+pub(crate) fn spawn_players(mut commands: Commands) {
     commands.spawn((
         Sprite {
             color: Color::BLACK,
