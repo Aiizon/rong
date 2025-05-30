@@ -1,5 +1,6 @@
 mod paddle;
 mod ball;
+mod border;
 
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
@@ -29,7 +30,8 @@ fn main() {
     app.add_systems(Startup, (
         spawn_camera, 
         paddle::spawn_players,
-        ball::spawn_ball
+        ball::spawn_ball,
+        border::spawn_borders
     ));
     
     app.add_systems(Update, paddle::move_paddles);
