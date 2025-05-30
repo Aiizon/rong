@@ -24,7 +24,7 @@ pub(crate) fn spawn_ball(
         CollidingEntities::default(),
         ActiveEvents::COLLISION_EVENTS,
         Collider::ball(BALL_RADIUS),
-        Velocity::linear(Vec2::new(-250.0, 0.0)),
+        Velocity::linear(Vec2::ZERO),
         Restitution {
             coefficient: 1.02,
             combine_rule: CoefficientCombineRule::Max

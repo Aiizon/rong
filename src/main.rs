@@ -31,6 +31,8 @@ fn main() {
     app.add_plugins(RapierDebugRenderPlugin::default());
     
     app.init_resource::<Score>();
+    app.insert_resource(GameState {running: true});
+    
     app.add_event::<GameEvents>();
     
     app.add_systems(Startup, (
@@ -43,13 +45,19 @@ fn main() {
     
     app.add_systems(Update, (
         paddle::move_paddles,
-        ball::detect_reset
-    ));
+        ball::detect_reset,
+        player::handle_win
+    ).run_if(check_game_running));
+    
+    app.add_systems(Update, (player::handle_restart).run_if(check_game_stopped));
     
     app.add_systems(PostUpdate, (
         ball::reset_ball,
-        player::add_point
-    ));
+        (
+            player::add_point,
+            player::check_winner
+        ).chain()
+    ).run_if(check_game_running));
     
     app.run();
 }
@@ -65,8 +73,26 @@ fn setup(
     }
 }
 
+#[derive(Resource, Default)]
+pub(crate) struct GameState {
+    running: bool
+}
+
+pub(crate) fn check_game_running(
+    game_state: Res<GameState>
+) -> bool {
+    game_state.running
+}
+
+pub(crate) fn check_game_stopped(
+    game_state: Res<GameState>
+) -> bool {
+    !game_state.running
+}
+
 #[derive(Event)]
 enum GameEvents {
     ResetBall(Player),
-    AddPoint(Player)
+    AddPoint(Player),
+    PlayerWin(Player)
 }
