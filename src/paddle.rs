@@ -10,10 +10,44 @@ pub const PADDLE_WIDTH: f32 = 10.0;
 pub const PADDLE_HEIGHT: f32 = 100.0;
 pub const PADDLE_SIZE: Vec2 = Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT);
 
+pub enum PaddleLocation {
+    Left,
+    Right
+}
+
 #[derive(Component)]
 pub struct Paddle {
     move_up:   KeyCode,
     move_down: KeyCode
+}
+
+impl Paddle {
+    pub fn new(loc: PaddleLocation, move_up: KeyCode, move_down: KeyCode) -> (Sprite, Transform, Paddle, RigidBody, Collider) {
+        (
+            Sprite {
+                color: Color::WHITE,
+                custom_size: Some(PADDLE_SIZE),
+                ..default()
+            },
+            Transform {
+                translation: match loc {
+                    PaddleLocation::Left => {
+                        Vec3::new(-(WINDOW_WIDTH / 2.0 - 15.0), 0.0, 1.0)
+                    }
+                    PaddleLocation::Right => {
+                        Vec3::new(WINDOW_WIDTH / 2.0 - 15.0, 0.0, 1.0)
+                    }
+                },
+                ..default()
+            },
+            Paddle {
+                move_up,
+                move_down,
+            },
+            RigidBody::KinematicPositionBased,
+            Collider::cuboid(PADDLE_WIDTH / 2.0, PADDLE_HEIGHT / 2.0)
+        )
+    }
 }
 
 
@@ -37,40 +71,8 @@ pub(crate) fn spawn_players(
     ));
 
     commands.spawn_batch([
-        (
-            Sprite {
-                color: Color::WHITE,
-                custom_size: Some(PADDLE_SIZE),
-                ..default()
-            },
-            Transform {
-                translation: Vec3::new(-(width - 15.0), 0.0, 0.0),
-                ..default()
-            },
-            Paddle {
-                move_up:   KeyCode::KeyW,
-                move_down: KeyCode::KeyS,
-            },
-            RigidBody::KinematicPositionBased,
-            Collider::cuboid(PADDLE_WIDTH / 2.0, PADDLE_HEIGHT / 2.0)
-        ),
-        (
-            Sprite {
-                color: Color::WHITE,
-                custom_size: Some(PADDLE_SIZE),
-                ..default()
-            },
-            Transform {
-                translation: Vec3::new(width - 15.0, 0.0, 0.0),
-                ..default()
-            },
-            Paddle {
-                move_up:   KeyCode::ArrowUp,
-                move_down: KeyCode::ArrowDown,
-            },
-            RigidBody::KinematicPositionBased,
-            Collider::cuboid(PADDLE_WIDTH / 2.0, PADDLE_HEIGHT / 2.0)
-        ),
+        Paddle::new(PaddleLocation::Left, KeyCode::KeyW, KeyCode::KeyS),
+        Paddle::new(PaddleLocation::Right, KeyCode::ArrowUp, KeyCode::ArrowDown),
     ]);
 }
 
