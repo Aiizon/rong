@@ -2,6 +2,7 @@ use bevy::color::Color;
 use bevy::math::{Vec2, Vec3};
 use bevy::prelude::*;
 use bevy::time::Time;
+use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
 pub const PADDLE_WIDTH: f32 = 10.0;
 pub const PADDLE_HEIGHT: f32 = 100.0;
@@ -15,16 +16,14 @@ pub struct Paddle {
 
 
 pub(crate) fn spawn_players(
-    mut commands: Commands, 
-    query:        Query<&Window>
+    mut commands: Commands
 ) {
-    let window = query.single().expect("No primary window found");
-    let width = window.width() / 2.0;
+    let width = WINDOW_WIDTH / 2.0;
 
     commands.spawn((
         Sprite {
             color: Color::BLACK,
-            custom_size: Some(Vec2::new(width * 2.0, window.height())),
+            custom_size: Some(Vec2::new(WINDOW_WIDTH, WINDOW_HEIGHT)),
             ..default()
         },
         Transform::default(),
@@ -67,11 +66,9 @@ pub(crate) fn spawn_players(
 pub(crate) fn move_paddles(
     mut paddles: Query<(&mut Transform, &Paddle)>,
     input:       Res<ButtonInput<KeyCode>>,
-    windows:     Query<&Window>,
     time:        Res<Time>
 ) {
-    let window = windows.single().expect("No primary window found");
-    let height = window.height() / 2.0 - PADDLE_SIZE.y / 2.0;
+    let height = WINDOW_HEIGHT / 2.0 - PADDLE_SIZE.y / 2.0;
 
     for (mut pos, settings) in &mut paddles {
         if input.pressed(settings.move_up) { 

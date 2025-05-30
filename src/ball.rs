@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::paddle;
+use crate::{paddle, WINDOW_HEIGHT};
 use crate::paddle::Paddle;
 
 pub const BALL_RADIUS: f32 = 10.0;
@@ -35,11 +35,9 @@ pub(crate) fn move_ball(
 
 pub(crate) fn collide_ball(
     mut balls: Query<(&Transform, &mut Ball)>,
-    paddles:   Query<&Transform, With<Paddle>>,
-    windows:   Query<&Window>
+    paddles:   Query<&Transform, With<Paddle>>
 ) {
-    let window = windows.single().expect("No primary window found");
-    let height = window.height() / 2.0;
+    let height = WINDOW_HEIGHT / 2.0;
     
     for (ball, mut vel) in &mut balls {
         for paddle in paddles {
@@ -48,10 +46,10 @@ pub(crate) fn collide_ball(
             }
             
             if 
-                ball.translation.x - BALL_RADIUS < paddle.translation.x + paddle::PADDLE_WIDTH / 2.0 &&
-                ball.translation.y - BALL_RADIUS < paddle.translation.y + paddle::PADDLE_WIDTH / 2.0 &&
-                ball.translation.x + BALL_RADIUS > paddle.translation.x - paddle::PADDLE_WIDTH / 2.0 &&
-                ball.translation.y + BALL_RADIUS > paddle.translation.y - paddle::PADDLE_WIDTH / 2.0 
+                ball.translation.x - BALL_RADIUS < paddle.translation.x + paddle::PADDLE_WIDTH  / 2.0 &&
+                ball.translation.y - BALL_RADIUS < paddle.translation.y + paddle::PADDLE_HEIGHT / 2.0 &&
+                ball.translation.x + BALL_RADIUS > paddle.translation.x - paddle::PADDLE_WIDTH  / 2.0 &&
+                ball.translation.y + BALL_RADIUS > paddle.translation.y - paddle::PADDLE_HEIGHT / 2.0 
             { 
                 vel.velocity *= -1.0;
             }
