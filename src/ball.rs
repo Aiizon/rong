@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use rand::Rng;
-use crate::border::Border;
 use crate::GameEvents;
 use crate::player::Player;
 
@@ -52,6 +51,7 @@ pub(crate) fn detect_reset(
         for hit_entity in ball.iter() {
             if let Ok(player) = goals.get(hit_entity) {
                 game_events.write(GameEvents::ResetBall(*player));
+                game_events.write(GameEvents::AddPoint(*player));
             }
         }
     }

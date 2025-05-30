@@ -8,7 +8,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use bevy::window::WindowResolution;
 use bevy_rapier2d::plugin::RapierPhysicsPlugin;
-use crate::player::Player;
+use crate::player::{Player, Score};
 
 pub const WINDOW_WIDTH:  f32 = 1280.0;
 pub const WINDOW_HEIGHT: f32 = 720.0;
@@ -30,6 +30,7 @@ fn main() {
     #[cfg(debug_assertions)]
     app.add_plugins(RapierDebugRenderPlugin::default());
     
+    app.init_resource::<Score>();
     app.add_event::<GameEvents>();
     
     app.add_systems(Startup, (
@@ -45,7 +46,10 @@ fn main() {
         ball::detect_reset
     ));
     
-    app.add_systems(PostUpdate, ball::reset_ball);
+    app.add_systems(PostUpdate, (
+        ball::reset_ball,
+        player::add_point
+    ));
     
     app.run();
 }
@@ -63,5 +67,6 @@ fn setup(
 
 #[derive(Event)]
 enum GameEvents {
-    ResetBall(Player)
+    ResetBall(Player),
+    AddPoint(Player)
 }

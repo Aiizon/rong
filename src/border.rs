@@ -73,8 +73,8 @@ impl Border {
             RigidBody::Fixed,
             Collider::cuboid(3.0, WINDOW_HEIGHT / 2.0),
             match loc { 
-                BorderLocation::Left  => Player::Player1,
-                BorderLocation::Right => Player::Player2,
+                BorderLocation::Left  => Player::Player2,
+                BorderLocation::Right => Player::Player1,
                 _ => Player::Player1
             },
             Sensor
