@@ -2,6 +2,7 @@ mod paddle;
 mod ball;
 mod border;
 mod player;
+mod scoreboard;
 
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
@@ -33,6 +34,7 @@ fn main() {
     
     app.add_systems(Startup, (
         setup,
+        scoreboard::spawn_scoreboard,
         paddle::spawn_players,
         ball::spawn_ball,
         border::spawn_borders
