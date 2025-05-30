@@ -35,10 +35,18 @@ pub(crate) fn move_ball(
 
 pub(crate) fn collide_ball(
     mut balls: Query<(&Transform, &mut Ball)>,
-    paddles:   Query<&Transform, With<Paddle>>
+    paddles:   Query<&Transform, With<Paddle>>,
+    windows:   Query<&Window>
 ) {
+    let window = windows.single().expect("No primary window found");
+    let height = window.height() / 2.0;
+    
     for (ball, mut vel) in &mut balls {
         for paddle in paddles {
+            if ball.translation.y.abs() + BALL_RADIUS / 2.0 > height { 
+                vel.velocity.y *= -1.0;
+            }
+            
             if 
                 ball.translation.x - BALL_RADIUS / 2.0 < paddle.translation.x + paddle::PADDLE_WIDTH / 4.0 &&
                 ball.translation.y - BALL_RADIUS / 2.0 < paddle.translation.y + paddle::PADDLE_WIDTH / 4.0 &&
