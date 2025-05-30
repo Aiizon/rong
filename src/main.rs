@@ -7,6 +7,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use bevy::window::WindowResolution;
 use bevy_rapier2d::plugin::RapierPhysicsPlugin;
+use crate::player::Player;
 
 pub const WINDOW_WIDTH:  f32 = 1280.0;
 pub const WINDOW_HEIGHT: f32 = 720.0;
@@ -28,6 +29,8 @@ fn main() {
     #[cfg(debug_assertions)]
     app.add_plugins(RapierDebugRenderPlugin::default());
     
+    app.add_event::<GameEvents>();
+    
     app.add_systems(Startup, (
         setup,
         paddle::spawn_players,
@@ -35,7 +38,12 @@ fn main() {
         border::spawn_borders
     ));
     
-    app.add_systems(Update, paddle::move_paddles);
+    app.add_systems(Update, (
+        paddle::move_paddles,
+        ball::detect_reset
+    ));
+    
+    app.add_systems(PostUpdate, ball::reset_ball);
     
     app.run();
 }
@@ -49,4 +57,9 @@ fn setup(
     for mut config in rapier_configs {
         config.gravity = Vec2::ZERO;
     }
+}
+
+#[derive(Event)]
+enum GameEvents {
+    ResetBall(Player)
 }
