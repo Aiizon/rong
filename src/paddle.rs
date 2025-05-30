@@ -3,9 +3,9 @@ use bevy::math::{Vec2, Vec3};
 use bevy::prelude::*;
 use bevy::time::Time;
 
-pub const PADDLE_HEIGHT: f32 = 10.0;
-pub const PADDLE_WIDTH: f32 = 100.0;
-pub const PADDLE_SIZE: Vec2 = Vec2::new(PADDLE_HEIGHT, PADDLE_WIDTH);
+pub const PADDLE_WIDTH: f32 = 10.0;
+pub const PADDLE_HEIGHT: f32 = 100.0;
+pub const PADDLE_SIZE: Vec2 = Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT);
 
 #[derive(Component)]
 pub struct Paddle {

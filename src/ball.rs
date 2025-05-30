@@ -43,15 +43,15 @@ pub(crate) fn collide_ball(
     
     for (ball, mut vel) in &mut balls {
         for paddle in paddles {
-            if ball.translation.y.abs() + BALL_RADIUS / 2.0 > height { 
+            if ball.translation.y.abs() + BALL_RADIUS > height { 
                 vel.velocity.y *= -1.0;
             }
             
             if 
-                ball.translation.x - BALL_RADIUS / 2.0 < paddle.translation.x + paddle::PADDLE_WIDTH / 4.0 &&
-                ball.translation.y - BALL_RADIUS / 2.0 < paddle.translation.y + paddle::PADDLE_WIDTH / 4.0 &&
-                ball.translation.x + BALL_RADIUS / 2.0 > paddle.translation.x - paddle::PADDLE_WIDTH / 4.0 &&
-                ball.translation.y + BALL_RADIUS / 2.0 > paddle.translation.y - paddle::PADDLE_WIDTH / 4.0 
+                ball.translation.x - BALL_RADIUS < paddle.translation.x + paddle::PADDLE_WIDTH / 2.0 &&
+                ball.translation.y - BALL_RADIUS < paddle.translation.y + paddle::PADDLE_WIDTH / 2.0 &&
+                ball.translation.x + BALL_RADIUS > paddle.translation.x - paddle::PADDLE_WIDTH / 2.0 &&
+                ball.translation.y + BALL_RADIUS > paddle.translation.y - paddle::PADDLE_WIDTH / 2.0 
             { 
                 vel.velocity *= -1.0;
             }
