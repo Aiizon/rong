@@ -1,6 +1,7 @@
 mod paddle;
 mod ball;
 mod border;
+mod player;
 
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
