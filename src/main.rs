@@ -14,13 +14,6 @@ fn main() {
     ;
 }
 
-#[derive(Component)]
-struct Paddle {
-    move_up:   KeyCode,
-    move_down: KeyCode
-}
-
-
 fn spawn_camera(mut commands: Commands) {
     commands.spawn(Camera2d::default());
 }

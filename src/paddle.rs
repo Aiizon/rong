@@ -1,11 +1,21 @@
 use bevy::color::Color;
 use bevy::math::{Vec2, Vec3};
-use bevy::prelude::{default, ButtonInput, Commands, KeyCode, Query, Res, Sprite, Transform, Window};
-use crate::Paddle;
+use bevy::prelude::*;
+use bevy::time::Time;
 
 const PADDLE_SIZE: Vec2 = Vec2::new(10.0, 100.0);
 
-pub(crate) fn spawn_players(mut commands: Commands, query: Query<&Window>) {
+#[derive(Component)]
+pub struct Paddle {
+    move_up:   KeyCode,
+    move_down: KeyCode
+}
+
+
+pub(crate) fn spawn_players(
+    mut commands: Commands, 
+    query:        Query<&Window>
+) {
     let window = query.single().expect("No primary window found");
     let width = window.width() / 2.0;
 
@@ -52,16 +62,23 @@ pub(crate) fn spawn_players(mut commands: Commands, query: Query<&Window>) {
     ]);
 }
 
-pub (crate) fn move_paddles(
+pub(crate) fn move_paddles(
     mut paddles: Query<(&mut Transform, &Paddle)>,
-    input: Res<ButtonInput<KeyCode>>
+    input:       Res<ButtonInput<KeyCode>>,
+    windows:     Query<&Window>,
+    time:        Res<Time>
 ) {
+    let window = windows.single().expect("No primary window found");
+    let height = window.height() / 2.0 - PADDLE_SIZE.y / 2.0;
+
     for (mut pos, settings) in &mut paddles {
         if input.pressed(settings.move_up) { 
-            pos.translation.y += 5.0;
+            pos.translation.y += 160.0 * time.delta_secs();
+            pos.translation.y = pos.translation.y.clamp(-height, height);
         }
         if input.pressed(settings.move_down) {
-            pos.translation.y -= 5.0;
+            pos.translation.y -= 160.0 * time.delta_secs();
+            pos.translation.y = pos.translation.y.clamp(-height, height);
         }
     }
 }
